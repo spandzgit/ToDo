@@ -2,11 +2,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # Description 
-This is a ToDo App built using React. The base structure is created using create react app.
-Following are the features of this app -
-1.) Create/Edit/Delete ToDo's
-2.) Persisting the ToDos in localstorage
-3.) Searching/Filtering of ToDos
+This is a ToDo App built using React. The base structure is created using create react app.\
+Following are the features of this app -\
+1.) Create/Edit/Delete ToDo's\
+2.) Persisting the ToDos in localstorage\
+3.) Searching/Filtering of ToDos\
 4.) Reporting the ToDo's in a calendar view
 
 ## Available Scripts
