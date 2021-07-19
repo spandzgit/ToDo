@@ -119,8 +119,6 @@ function MainContainer() {
 
   const handleFilterkeyDown = event =>{
     if(event.key === 'Enter') {
-      // const updatedTodos = [...todos];
-      // updatedTodos = editingTodo.todo;
       setTodos((oldState) => oldState);
       setFilterValue('');
     }
