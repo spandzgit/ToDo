@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from "prop-types";
 
 import './App.css';
 
@@ -18,6 +19,41 @@ function SideNav() {
   )
 }
 
+function TodoLists({editMode, editingTodo, ele, index, filterValue, handleEditChange, handleKeyChng, handleUpdate, handleDelete}) {
+  return (
+    editMode && editingTodo.oldStateTodo === ele.todo ? 
+      <React.Fragment>
+        <input type="text" 
+               name="edit-ip" 
+               className="todo-list-item" 
+               key={`ip${index}`} 
+               value={editingTodo.todo} 
+               onChange={handleEditChange} 
+               onKeyDown={handleKeyChng(index)}></input>
+        <button className="todo-delete-btn" key={`ipbtnup${index}`} onClick={handleUpdate(index)}>e</button>
+        <button className="todo-delete-btn" key={`ipbtndel${index}`} onClick={handleDelete(index)}>X</button>
+      </React.Fragment>
+        :
+      <React.Fragment>
+        <li className="todo-list-item" key={`li${index}`}>{ele.todo}</li>
+        <button className="todo-delete-btn" key={`libtnup${index}`} onClick={handleUpdate(index)}>e</button>
+        <button className="todo-delete-btn" key={`libtndel${index}`} onClick={handleDelete(index)}>X</button>
+      </React.Fragment>
+  )
+}
+
+TodoLists.propTypes = {
+  editMode: PropTypes.bool.isRequired,
+  editingTodo: PropTypes.object.isRequired,
+  ele: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  filterValue: PropTypes.string.isRequired,
+  handleEditChange: PropTypes.func.isRequired,
+  handleKeyChng: PropTypes.func.isRequired,
+  handleUpdate: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
+}
+
 function MainContainer() {
   const [todos, setTodos] = useState(
     []
@@ -35,6 +71,9 @@ function MainContainer() {
     {}
   )
 
+  const [filterValue, setFilterValue] = useState(
+    ''
+  )
 
   const handleChange = event => {
     setInputValue(event.target.value);
@@ -62,7 +101,7 @@ function MainContainer() {
   }
 
   const handleEditChange = event => {
-    setEditingTodo({...editingTodo, todo: `${event.target.value}s`});
+    setEditingTodo({...editingTodo, todo: `${event.target.value}`});
   }
 
   const handleKeyChng = (index) => (event) => {
@@ -71,6 +110,19 @@ function MainContainer() {
       updatedTodos[index].todo = editingTodo.todo;
       setTodos(updatedTodos);
       setEditMode(false);
+    }
+  }
+
+  const handleFilterChange = event => {
+    setFilterValue(event.target.value);
+  }
+
+  const handleFilterkeyDown = event =>{
+    if(event.key === 'Enter') {
+      // const updatedTodos = [...todos];
+      // updatedTodos = editingTodo.todo;
+      setTodos((oldState) => oldState);
+      setFilterValue('');
     }
   }
 
@@ -85,30 +137,35 @@ function MainContainer() {
              className="todo-input"
              onChange={handleChange}
              onKeyDown={handlekeyDown}></input>
+      
+      <input placeholder="Filter ToDos"
+             type="text"
+             name="filterTodos"
+             id="filterTodos"
+             size="30"
+             value={filterValue}
+             className="todo-filter"
+             onChange={handleFilterChange}
+             onKeyDown={handleFilterkeyDown}></input>
+
       <ul className="todo-list">
         {
-          todos.map((ele, index) => {
+          todos.filter((ele, index) => {
+            return filterValue ? ele.todo.toLowerCase().includes(filterValue.toLowerCase()) : ele;
+          }).map((ele, index) => {
             return (
               <div className="todo-list-items" key={index}>
-                {editMode && editingTodo.oldStateTodo === ele.todo ? 
-                <React.Fragment>
-                  <input type="text" 
-                         name="edit-ip" 
-                         className="todo-list-item" 
-                         key={`ip${index}`} 
-                         value={editingTodo.todo} 
-                         onChange={handleEditChange} 
-                         onKeyDown={handleKeyChng(index)}></input>
-                  <button className="todo-delete-btn" key={`ipbtnup${index}`} onClick={handleUpdate(index)}>e</button>
-                  <button className="todo-delete-btn" key={`ipbtndel${index}`} onClick={handleDelete(index)}>X</button>
-                </React.Fragment>
-                  :
-                <React.Fragment>
-                  <li className="todo-list-item" key={`li${index}`}>{ele.todo}</li>
-                  <button className="todo-delete-btn" key={`libtnup${index}`} onClick={handleUpdate(index)}>e</button>
-                  <button className="todo-delete-btn" key={`libtndel${index}`} onClick={handleDelete(index)}>X</button>
-                </React.Fragment>
-                }
+                <TodoLists 
+                  editMode={editMode}
+                  editingTodo={editingTodo}
+                  ele={ele}
+                  index={index}
+                  filterValue={filterValue}
+                  handleEditChange={handleEditChange}
+                  handleKeyChng={handleKeyChng}
+                  handleUpdate={handleUpdate}
+                  handleDelete={handleDelete}
+                />
               </div>
             )
           })
