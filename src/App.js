@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from "prop-types";
 
 import './App.css';
@@ -123,6 +123,17 @@ function MainContainer() {
       setFilterValue('');
     }
   }
+
+  useEffect(() => {
+    const todos = JSON.parse(localStorage.getItem('todos'));
+    if(todos) {
+      setTodos(todos);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <div className="app-main-container">
