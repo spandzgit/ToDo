@@ -43,7 +43,7 @@ For future enhancements, todos, ideas:
 4.) Add unit tests for DOM elements, functionalities & handlers.\
 5.) Side nav links show Active / Not Active status as visual identifier of the app status.\
 6.) Add Error handling across app.\
-7.) Add app loading to handle actual async requests.\
+7.) Add app loading to handle actual async requests.
 
 
 ### Thoughts | Enhancements
@@ -51,9 +51,9 @@ For future enhancements, todos, ideas:
 1.) Add Status for ToDo's : ACTIVE | COMPLETED | ALL.\
 2.) Add UI filtering to show ToDo's based on above status.\
 3.) Add field for ToDo Due Date. Currently its defaulted to Today.\
-4.) Make the list item <li> showing the ToDo double click editable with delete embeded.\
+4.) Make the list item li showing the ToDo double click editable with delete embeded.\
 5.) Add in accessibility bits as needed for page flow.\
 6.) Check for duplication - if a ToDo exists dont add throw custom message.\
 7.) Check box on list item(ToDo) to mark Complete as status.\
 8.) Show count of active Todo's as Items left to action on.\
-9.) Add sort order of List Item - Due Date.\
+9.) Add sort order of List Item - Due Date.
