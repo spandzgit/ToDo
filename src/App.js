@@ -1,9 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from "prop-types";
 import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
 
 import './App.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+/**
+ * Header component for the ToDo view to render the Header of the App.
+ */
 function Header() {
   return (
     <header className="app-header">
@@ -12,11 +18,15 @@ function Header() {
   );
 }
 
+/**
+ * Side Navigation component rendering the side navigation bar containing navgiation list items
+ * and correspoding link paths to render.
+ */
 function SideNav() {
   return (
     <nav className="app-side-nav">
-      <ul>
-        <li>
+      <ul className="app-nav-list">
+        <li className="app-nav-list-items">
           <Link to="/todo">Add ToDo's</Link>
         </li>
         <li>
@@ -27,12 +37,45 @@ function SideNav() {
   )
 }
 
+/**
+ * App reporting component to render calendar. Using third party react component <react-big-calendar>
+ * dependency added.
+ */
 function CalendarView() {
+  const localizer = momentLocalizer(moment);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const todos = JSON.parse(localStorage.getItem('todos'));
+    if(todos) {
+      let events = todos.map((ele, idx) => {
+        return {
+          title: ele.todo,
+          start: ele.dueDate,
+          end: ele.dueDate
+        }
+      });
+      setEvents(events);
+    }
+  }, []);
+
   return (
-    <p>Calendar View</p>
+    <div className="app-calendar-holder">
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 700, width: 900 }}
+      />
+    </div>
   )
 }
 
+/**
+ * Todo view encapsulator for the main view for Todo's containing the header and mainContainer
+ * components.
+ */
 function TodoView() {
   return (
     <React.Fragment>
@@ -42,6 +85,9 @@ function TodoView() {
   )
 }
 
+/**
+ * ToDo List Component. Takes all the todo details and handlers as props and renders the view accordingly.
+ */
 function TodoLists({editMode, editingTodo, ele, index, filterValue, handleEditChange, handleKeyChng, handleUpdate, handleDelete}) {
   return (
     editMode && editingTodo.oldStateTodo === ele.todo ? 
@@ -77,6 +123,10 @@ TodoLists.propTypes = {
   handleDelete: PropTypes.func.isRequired
 }
 
+/**
+ * Main Container component. Has the component state and handler function implementations.
+ * Child component rendering with passing related props.
+ */
 function MainContainer() {
   const [todos, setTodos] = useState(
     []
@@ -124,7 +174,7 @@ function MainContainer() {
   }
 
   const handleEditChange = event => {
-    setEditingTodo({...editingTodo, todo: `${event.target.value}`});
+    setEditingTodo({...editingTodo, todo: event.target.value});
   }
 
   const handleKeyChng = (index) => (event) => {
@@ -207,12 +257,16 @@ function MainContainer() {
   )
 }
 
+/**
+ * Base App Component rendering the complete view of the App. Side nav for side navigation and related
+ * router to link the correspoding path(component) to render.
+ */
 export default class App extends React.Component {
   render() {
     return (
       <div className="app">
         <Router>
-        <SideNav />
+          <SideNav />
           <div className="app-holder">
             <Switch>
               <Redirect exact from="/" to="/todo" />
@@ -220,7 +274,7 @@ export default class App extends React.Component {
                 <TodoView />
               </Route>
               <Route path="/report">
-                <CalendarView />
+                <CalendarView/>
               </Route>
             </Switch>
           </div>
