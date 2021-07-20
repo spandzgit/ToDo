@@ -21,6 +21,8 @@ body {
   border-right: 1px dashed gray;
   padding: 1%;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-holder {

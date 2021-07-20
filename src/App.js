@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from "prop-types";
+import {BrowserRouter as Router, Switch, Route, Link, Redirect} from "react-router-dom";
 
 import './App.css';
 
@@ -14,8 +15,30 @@ function Header() {
 function SideNav() {
   return (
     <nav className="app-side-nav">
-      ToDo Add Side Nav!
+      <ul>
+        <li>
+          <Link to="/todo">Add ToDo's</Link>
+        </li>
+        <li>
+          <Link to="/report">Report - Calendar View</Link>
+        </li>
+      </ul>
     </nav>
+  )
+}
+
+function CalendarView() {
+  return (
+    <p>Calendar View</p>
+  )
+}
+
+function TodoView() {
+  return (
+    <React.Fragment>
+      <Header />
+      <MainContainer />
+    </React.Fragment>
   )
 }
 
@@ -188,11 +211,20 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="app">
+        <Router>
         <SideNav />
-        <div className="app-holder">
-          <Header />
-          <MainContainer />
-        </div>
+          <div className="app-holder">
+            <Switch>
+              <Redirect exact from="/" to="/todo" />
+              <Route path="/todo">
+                <TodoView />
+              </Route>
+              <Route path="/report">
+                <CalendarView />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
       </div>
     );
   }
